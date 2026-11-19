@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Từ Vựng TOEIC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Vocab">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- FLOATING QUICK UTILITY -->
+  <div class="floating-utils">
+    <button class="add-word-pill-btn" onclick="openWordEditorModal(null)" title="Thêm từ vựng mới vào bộ từ">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Thêm từ</span>
+    </button>
+    <button class="ios-install-pill-btn" onclick="openIosInstallModal()" title="Cài đặt App lên iPhone / iPad">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      <span>Cài lên iOS</span>
+    </button>
+    <button class="sfx-toggle-btn active" id="sfxToggleBtn" onclick="toggleSoundEffects()" title="Bật/tắt âm thanh hiệu ứng">
+      <svg id="sfxIconOn" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+      <svg id="sfxIconOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="display:none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+    </button>
+    <button class="search-pill-btn" onclick="openSearchModal()" title="Tra cứu nhanh (Ctrl+K)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Tìm từ...</span>
+      <kbd>Ctrl K</kbd>
+    </button>
+  </div>
+
+  <main class="screen-wrapper">
+
+    <!-- =====================================================================
+         SCREEN 1 (LAYER 1): VOCABULARY HUB (TRANG CHỦ)
+         ===================================================================== -->
+    <section id="screen-hub" class="app-screen active">
+      <div class="centered-page">
+        <div class="hub-header">
+          <h1>Từ vựng TOEIC</h1>
+          <p>Chọn lộ trình học theo ngày, theo chủ điểm hoặc ôn tập các từ đã lưu.</p>
+        </div>
+
+        <div class="hub-grid">
+          <div class="hub-card" onclick="openTopicListScreen('daily')">
+            <div class="hub-card-icon green">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="hub-card-body">
+              <div class="hub-card-top">
+                <h3>Daily Vocab</h3>
+                <span class="hub-pill">26 ngày · 1.284 từ</span>
+              </div>
+              <p>Học từ vựng chia sẵn theo 52 buổi: Phần Nghe (Day 01–10) và Phần Đọc (Day 11–26).</p>
+              <div class="hub-progress-line">
+                <div class="hub-progress-bar"><div class="hub-progress-fill" id="hubDailyBar" style="width:0%"></div></div>
+                <span id="hubDailyStat">Đã học 0 / 1.284</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hub-card" onclick="openTopicListScreen('master')">
+            <div class="hub-card-icon emerald">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <div class="hub-card-body">
+              <div class="hub-card-top">
+                <h3>Master Vocab</h3>
+                <span class="hub-pill">30 chủ điểm · 1.073 từ</span>
+              </div>
+              <p>30 chủ điểm cốt lõi trong đề thi TOEIC: Tuyển dụng, Hợp đồng, Tài chính, Sản xuất, Y tế...</p>
+              <div class="hub-progress-line">
+                <div class="hub-progress-bar"><div class="hub-progress-fill" id="hubMasterBar" style="width:0%"></div></div>
+                <span id="hubMasterStat">Đã học 0 / 1.073</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hub-card" onclick="openReviewScreen()">
+            <div class="hub-card-icon amber">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+            </div>
+            <div class="hub-card-body">
+              <div class="hub-card-top">
+                <h3>Ôn tập hôm nay</h3>
+                <span class="hub-pill amber" id="hubReviewBadge">0 từ cần ôn</span>
+              </div>
+              <p>Tổng hợp những từ bạn đánh dấu cần ôn lại hoặc gắn sao ưu tiên để không bị quên.</p>
+              <div class="hub-meta-text" id="hubMasteredSummary">Đã thành thạo: 0 từ · Đã gắn sao: 0 từ</div>
+            </div>
+          </div>
+
+          <div class="hub-card" onclick="openLessonScreen('my_vocab', 'Từ vựng của tôi')">
+            <div class="hub-card-icon slate">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="hub-card-body">
+              <div class="hub-card-top">
+                <h3>Từ vựng của tôi</h3>
+                <span class="hub-pill">15 từ</span>
+              </div>
+              <p>Bộ sưu tập từ vựng cá nhân lưu lại từ các bài luyện nghe chép chính tả thực tế.</p>
+              <div class="hub-progress-line">
+                <div class="hub-progress-bar"><div class="hub-progress-fill" id="hubMyBar" style="width:0%"></div></div>
+                <span id="hubMyStat">Đã học 0 / 15</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SCREEN 2 (LAYER 2): TOPIC / LESSON SELECTION SCREEN
+         ===================================================================== -->
+    <section id="screen-topics" class="app-screen">
+      <div class="centered-page">
+        <div class="topics-screen-header">
+          <div>
+            <button class="kicker-back-link" onclick="openHubScreen()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <span>Trang chủ Từ vựng</span>
+            </button>
+            <h1 id="topicsScreenTitle">Daily Vocab</h1>
+            <p id="topicsScreenSub">26 ngày · 52 buổi · 1.284 từ vựng</p>
+          </div>
+
+          <div class="part-segmented" id="dailyPartSwitcher" style="display: none;">
+            <button class="part-seg-btn active" id="btnPartNghe" onclick="switchDailyPart('nghe')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+              <span>Phần Nghe (Day 01–10)</span>
+            </button>
+            <button class="part-seg-btn" id="btnPartDoc" onclick="switchDailyPart('doc')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <span>Phần Đọc (Day 11–26)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="topics-grid" id="topicsGridContainer"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SCREEN 3 (LAYER 3): FOCUSED LESSON SCREEN (XEM TỪ / HỌC / CHƠI)
+         ===================================================================== -->
+    <section id="screen-lesson" class="app-screen">
+      <div class="centered-page lesson-page-width">
+
+        <!-- Compact Lesson Header -->
+        <div class="lesson-top-bar" id="lessonTopBar">
+          <div class="lesson-heading-left">
+            <button class="kicker-back-link" id="lessonBackLink" onclick="goBackFromLesson()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <span id="lessonKickerText">Daily Vocab</span>
+            </button>
+            <div class="lesson-title-wrap">
+              <h1 id="lessonTitle">Day 01 · Buổi 1</h1>
+              <span class="lesson-count-badge" id="lessonWordCount">25 từ</span>
+            </div>
+          </div>
+
+          <!-- 3-Mode Pill Switcher -->
+          <div class="mode-switcher" role="tablist">
+            <button class="mode-tab active" data-mode="xem_tu" onclick="switchMode('xem_tu')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span>Xem từ</span>
+            </button>
+            <button class="mode-tab" data-mode="hoc" onclick="switchMode('hoc')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              <span>Học</span>
+            </button>
+            <button class="mode-tab" data-mode="choi" onclick="switchMode('choi')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+              <span>Chơi</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             MODE 1: XEM TỪ (WIDE BALANCED FLASHCARD + WORD LIST)
+             =============================================================== -->
+        <div id="mode-xem_tu" class="mode-panel active">
+
+          <!-- Wide & Balanced Flashcard Deck -->
+          <div class="preview-deck-card">
+            <div class="deck-topbar">
+              <div class="deck-counter">
+                <span id="fcProgressText">Từ 1 / 25</span>
+                <span class="dot-sep">·</span>
+                <span id="fcStatusTag" class="status-tag new">Mới</span>
+              </div>
+              <div class="deck-actions">
+                <button class="icon-action-btn" id="fcEditBtn" onclick="openWordEditorModal(currentFlashcard?.id)" title="Sửa từ vựng này">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+                <button class="icon-action-btn" id="fcStarBtn" onclick="toggleStarCurrentCard()" title="Gắn sao từ này">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- 3D Flip Stage -->
+            <div class="deck-3d-viewport" onclick="flipCurrentCard()">
+              <div class="deck-3d-inner" id="flipCardInner">
+                <!-- FRONT FACE: Word truly centered, phonetic centered directly beneath word, speaker floating right -->
+                <div class="deck-face deck-face-front">
+                  <div class="deck-word-anchor">
+                    <h2 class="deck-word" id="fcFrontWord">adjust</h2>
+                    <button class="audio-circle-btn deck-floating-speaker" onclick="event.stopPropagation(); speakWord(currentFlashcard?.word, 0.92, this)" title="Nghe phát âm">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                    </button>
+                  </div>
+                  <div class="deck-phonetic-row">
+                    <span class="pos-pill" id="fcFrontPos">v</span>
+                    <span class="ipa-mono" id="fcFrontIpa">/əˈdʒʌst/</span>
+                  </div>
+                </div>
+
+                <!-- BACK FACE: NO word header! Only enlarged Meaning & Highlighted Example -->
+                <div class="deck-face deck-face-back">
+                  <div class="deck-meaning" id="fcBackMeaning">điều chỉnh</div>
+                  <div class="deck-example-box" id="fcBackExampleBox">
+                    <div class="deck-example-texts">
+                      <div class="deck-en-line" id="fcBackEnEx">He is adjusting the height of the chair.</div>
+                      <div class="deck-vi-line" id="fcBackViEx">Anh ấy đang điều chỉnh độ cao của chiếc ghế.</div>
+                    </div>
+                    <button class="w-speaker-circle" onclick="event.stopPropagation(); speakWord(currentFlashcard?.en_example, 0.92, this)" title="Nghe cả câu ví dụ">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Deck Footer Controls -->
+            <div class="deck-footer">
+              <button class="deck-nav-btn" onclick="prevCard()" id="btnPrevCard">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                <span>Từ trước</span>
+              </button>
+              <div class="deck-status-btns">
+                <button class="status-choice-btn learning" onclick="markCard(false)">
+                  <span>Cần ôn lại</span>
+                </button>
+                <button class="status-choice-btn mastered" onclick="markCard(true)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span>Đã thuộc</span>
+                </button>
+              </div>
+              <button class="deck-nav-btn" onclick="nextCard()" id="btnNextCard">
+                <span>Từ sau</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Word List Section -->
+          <div class="wordlist-section">
+            <div class="wordlist-header-row">
+              <div class="wordlist-title-group">
+                <h3 class="wordlist-heading">Danh sách từ (<span id="listTotalCount">25</span>)</h3>
+                <button class="btn-add-word-inline" onclick="openWordEditorModal(null)">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span>Thêm từ vào bài này</span>
+                </button>
+              </div>
+              <div class="wordlist-controls">
+                <div class="local-search">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  <input type="text" id="lessonSearchInput" placeholder="Lọc nhanh trong bài..." oninput="handleLessonSearch()">
+                </div>
+                <select class="sort-select" id="lessonSortSelect" onchange="renderWordList()">
+                  <option value="default">Thứ tự gốc</option>
+                  <option value="az">A → Z</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-tabs" role="tablist">
+              <button class="filter-tab active" data-status="all" onclick="filterByStatus('all')">Tất cả (<span id="count-all">0</span>)</button>
+              <button class="filter-tab" data-status="starred" onclick="filterByStatus('starred')">Gắn sao (<span id="count-starred">0</span>)</button>
+              <button class="filter-tab" data-status="new" onclick="filterByStatus('new')">Mới (<span id="count-new">0</span>)</button>
+              <button class="filter-tab" data-status="learning" onclick="filterByStatus('learning')">Đang ôn (<span id="count-learning">0</span>)</button>
+              <button class="filter-tab" data-status="mastered" onclick="filterByStatus('mastered')">Thành thạo (<span id="count-mastered">0</span>)</button>
+            </div>
+
+            <div class="word-rows" id="wordCardList"></div>
+          </div>
+        </div>
+
+        <!-- ===============================================================
+             MODE 2: HỌC (GUIDED 5-WORD BATCH STUDY)
+             =============================================================== -->
+        <div id="mode-hoc" class="mode-panel">
+          <div class="study-panel-card" id="studyContainer"></div>
+        </div>
+
+        <!-- ===============================================================
+             MODE 3: CHƠI (LAYER 3A: GAME MENU -> LAYER 3B: COMPACT ACTIVE GAME)
+             =============================================================== -->
+        <div id="mode-choi" class="mode-panel">
+
+          <!-- LAYER 3A: GAME HUB MENU -->
+          <div id="gameMenuLayer">
+            <div class="game-cards-grid">
+
+              <div class="game-menu-card" onclick="launchGame('listen_choice')">
+                <div class="game-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0"/><path d="M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 1 1 0 4"/></svg>
+                </div>
+                <div class="game-card-info">
+                  <h3>Nghe nhanh</h3>
+                  <p>Nghe phát âm từ vựng, chọn nghĩa tiếng Việt hoặc từ tiếng Anh đúng</p>
+                  <div class="game-record-tag" id="rec-listen_choice"></div>
+                </div>
+              </div>
+
+              <div class="game-menu-card" onclick="launchGame('matching')">
+                <div class="game-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 2c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/></svg>
+                </div>
+                <div class="game-card-info">
+                  <h3>Ghép cặp</h3>
+                  <p>Ghép từ tiếng Anh với nghĩa tiếng Việt tương ứng, càng nhanh càng tốt</p>
+                  <div class="game-record-tag" id="rec-matching"></div>
+                </div>
+              </div>
+
+              <div class="game-menu-card" onclick="launchGame('mcq')">
+                <div class="game-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+                </div>
+                <div class="game-card-info">
+                  <h3>Trắc nghiệm 4 đáp án</h3>
+                  <p>Đảo chiều linh hoạt Anh ⇄ Việt hoặc Điền từ vào câu ví dụ</p>
+                  <div class="game-record-tag" id="rec-mcq"></div>
+                </div>
+              </div>
+
+              <div class="game-menu-card" onclick="launchGame('typing')">
+                <div class="game-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/></svg>
+                </div>
+                <div class="game-card-info">
+                  <h3>Gõ từ vựng</h3>
+                  <p>Luyện nhớ và gõ từ Việt ⇄ Anh theo hàng đợi thông minh</p>
+                  <div class="game-record-tag" id="rec-typing"></div>
+                </div>
+              </div>
+
+              <div class="game-menu-card" onclick="launchGame('listen_type')">
+                <div class="game-card-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                </div>
+                <div class="game-card-info">
+                  <h3>Nghe gõ từ</h3>
+                  <p>Nghe phát âm tốc độ chuẩn hoặc chậm (0.6x) và gõ lại chính xác từ vựng</p>
+                  <div class="game-record-tag" id="rec-listen_type"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- LAYER 3B: COMPACT ACTIVE GAME SCREEN -->
+          <div id="activeGameLayer" style="display: none;">
+            <div class="compact-game-toolbar" id="gameToolbar"></div>
+            <div class="game-stage-card" id="gameStageCard"></div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SCREEN 4: REVIEW (ÔN TẬP SPACED REPETITION)
+         ===================================================================== -->
+    <section id="screen-review" class="app-screen">
+      <div class="centered-page lesson-page-width">
+        <div class="page-header-block">
+          <div>
+            <button class="kicker-back-link" onclick="openHubScreen()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <span>Trang chủ Từ vựng</span>
+            </button>
+            <h1>Ôn tập từ vựng</h1>
+            <p class="page-desc">Luyện tập lại các từ đang ôn hoặc đã gắn sao.</p>
+          </div>
+          <div class="header-cta-group">
+            <button class="primary-btn" onclick="startReviewPractice('hoc')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              <span>Học theo nhóm</span>
+            </button>
+            <button class="secondary-btn" onclick="startReviewPractice('choi')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/></svg>
+              <span>Chơi Game ôn tập</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-tabs" style="margin-bottom: 18px;">
+          <button class="filter-tab active" id="btnReviewDue" onclick="switchReviewTab('due')">Đang ôn (<span id="revDueCount">0</span>)</button>
+          <button class="filter-tab" id="btnReviewStarred" onclick="switchReviewTab('starred')">Gắn sao (<span id="revStarredCount">0</span>)</button>
+          <button class="filter-tab" id="btnReviewMastered" onclick="switchReviewTab('mastered')">Thành thạo (<span id="revMasteredCount">0</span>)</button>
+        </div>
+
+        <div class="word-rows" id="reviewWordList"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- GLOBAL SEARCH MODAL -->
+  <div class="modal-backdrop" id="searchModal" onclick="closeSearchModal(event)">
+    <div class="search-dialog" onclick="event.stopPropagation()">
+      <div class="search-dialog-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="globalSearchInput" placeholder="Gõ từ tiếng Anh hoặc nghĩa tiếng Việt để tra cứu..." oninput="handleGlobalSearch()">
+        <button class="dialog-close-btn" onclick="closeSearchModal()">ESC</button>
+      </div>
+      <div class="search-dialog-results" id="globalSearchResults">
+        <div class="empty-state-box">Nhập từ khóa bất kỳ để tra cứu nhanh trong kho từ vựng.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT WORD MODAL -->
+  <div class="modal-backdrop" id="wordEditorModal" onclick="closeWordEditorModal(event)">
+    <div class="word-editor-dialog" onclick="event.stopPropagation()">
+      <div class="word-editor-header">
+        <div>
+          <h3 id="wordEditorTitle">Thêm từ vựng mới</h3>
+          <p id="wordEditorSubtitle">Tùy chỉnh đầy đủ từ vựng, câu ví dụ và mục Xem thêm (họ từ, đồng nghĩa, cụm từ, mẹo thi)</p>
+        </div>
+        <button class="dialog-close-btn" onclick="closeWordEditorModal()">ESC</button>
+      </div>
+
+      <form class="word-editor-body" id="wordEditorForm" onsubmit="saveWordEditorForm(event)">
+        <input type="hidden" id="editWordId" value="">
+
+        <div class="we-grid-3">
+          <div class="we-field">
+            <label for="editWordText">Từ vựng tiếng Anh <span class="req">*</span></label>
+            <input type="text" id="editWordText" required placeholder="VD: thoroughly">
+          </div>
+          <div class="we-field">
+            <label for="editWordPos">Từ loại (POS)</label>
+            <input type="text" id="editWordPos" placeholder="VD: adv, v, n, adj">
+          </div>
+          <div class="we-field">
+            <label for="editWordIpa">Phiên âm (IPA)</label>
+            <input type="text" id="editWordIpa" placeholder="VD: /ˈθɜːroʊli/">
+          </div>
+        </div>
+
+        <div class="we-grid-3">
+          <div class="we-field">
+            <label for="editWordCategory">Bộ từ vựng</label>
+            <select id="editWordCategory" onchange="populateSubCategoryOptions()">
+              <option value="Từ vựng của tôi">Từ vựng của tôi</option>
+              <option value="Daily Vocab (Phần Nghe)">Daily Vocab (Phần Nghe)</option>
+              <option value="Daily Vocab (Phần Đọc)">Daily Vocab (Phần Đọc)</option>
+              <option value="Master Vocab">Master Vocab</option>
+            </select>
+          </div>
+          <div class="we-field">
+            <label for="editWordSubCategory">Bài học / Chủ điểm</label>
+            <input type="text" id="editWordSubCategory" list="subCategoryDatalist" placeholder="Chọn hoặc nhập tên bài...">
+            <datalist id="subCategoryDatalist"></datalist>
+          </div>
+          <div class="we-field">
+            <label for="editWordStars">Độ phổ biến (Số sao)</label>
+            <select id="editWordStars">
+              <option value="3">★★★ (3 sao - Rất hay gặp)</option>
+              <option value="2">★★☆ (2 sao - Phổ biến)</option>
+              <option value="1">★☆☆ (1 sao - Nâng cao)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="we-field">
+          <label for="editWordMeaning">Nghĩa tiếng Việt <span class="req">*</span></label>
+          <input type="text" id="editWordMeaning" required placeholder="VD: kỹ lưỡng; hoàn toàn">
+        </div>
+
+        <div class="we-grid-2">
+          <div class="we-field">
+            <label for="editWordEnEx">Câu ví dụ tiếng Anh</label>
+            <input type="text" id="editWordEnEx" placeholder="VD: The mechanic checked the car thoroughly.">
+          </div>
+          <div class="we-field">
+            <label for="editWordViEx">Dịch nghĩa câu ví dụ</label>
+            <input type="text" id="editWordViEx" placeholder="VD: Thợ máy đã kiểm tra chiếc xe rất kỹ.">
+          </div>
+        </div>
+
+        <div class="we-section-divider">
+          <span>PHẦN XEM THÊM (MỖI DÒNG 1 MỤC)</span>
+        </div>
+
+        <div class="we-grid-2">
+          <div class="we-field">
+            <label for="editWordFamily">Họ từ (Định dạng: <code>từ (loại): nghĩa</code>)</label>
+            <textarea id="editWordFamily" rows="2" placeholder="thorough (adj): kỹ lưỡng, cẩn thận"></textarea>
+          </div>
+          <div class="we-field">
+            <label for="editWordPhrases">Cụm từ (Định dạng: <code>cụm từ — nghĩa</code>)</label>
+            <textarea id="editWordPhrases" rows="2" placeholder="thoroughly check — kiểm tra kỹ&#10;thoroughly clean — lau dọn sạch sẽ"></textarea>
+          </div>
+        </div>
+
+        <div class="we-grid-2">
+          <div class="we-field">
+            <label for="editWordSynonyms">Đồng nghĩa (Mỗi dòng 1 từ)</label>
+            <textarea id="editWordSynonyms" rows="2" placeholder="carefully (cẩn thận)&#10;completely (hoàn toàn)"></textarea>
+          </div>
+          <div class="we-field">
+            <label for="editWordAntonyms">Trái nghĩa (Mỗi dòng 1 từ)</label>
+            <textarea id="editWordAntonyms" rows="2" placeholder="carelessly"></textarea>
+          </div>
+        </div>
+
+        <div class="we-grid-2">
+          <div class="we-field">
+            <label for="editWordTips">Mẹo đề thi / Ghi chú</label>
+            <textarea id="editWordTips" rows="2" placeholder="Hay đi với động từ kiểm tra, xem xét: check / review / inspect thoroughly..."></textarea>
+          </div>
+          <div class="we-field">
+            <label for="editWordPart">Part xuất hiện (Cách nhau dấu phẩy)</label>
+            <input type="text" id="editWordPart" placeholder="VD: LC, P5-6, P7">
+            <div class="we-part-quick-chips">
+              <button type="button" class="we-chip" onclick="togglePartChip('LC')">+ LC</button>
+              <button type="button" class="we-chip" onclick="togglePartChip('P5-6')">+ P5-6</button>
+              <button type="button" class="we-chip" onclick="togglePartChip('P7')">+ P7</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="word-editor-footer">
+          <div class="we-footer-left">
+            <button type="button" class="btn-danger-outline" id="btnDeleteCustomWord" style="display:none;" onclick="deleteCurrentWordInEditor()">Xóa từ này</button>
+            <button type="button" class="btn-reset-default" id="btnResetOriginalWord" style="display:none;" onclick="resetEditedWordToDefault()">Khôi phục gốc</button>
+          </div>
+          <div class="we-footer-right">
+            <button type="button" class="secondary-btn" onclick="closeWordEditorModal()">Hủy</button>
+            <button type="submit" class="primary-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Lưu từ vựng</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- iOS INSTALL & OFFLINE PACKAGING MODAL -->
+  <div class="modal-backdrop" id="iosInstallModal" onclick="closeIosInstallModal(event)">
+    <div class="ios-modal-card" onclick="event.stopPropagation()">
+      <div class="ios-modal-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <img src="apple-touch-icon.png" alt="App Icon" class="ios-modal-app-icon">
+          <div>
+            <h3>Cài đặt App Từ Vựng lên iPhone / iPad</h3>
+            <p>Hỗ trợ chạy toàn màn hình & học 100% Offline mọi lúc</p>
+          </div>
+        </div>
+        <button class="dialog-close-btn" onclick="closeIosInstallModal()">Đóng</button>
+      </div>
+
+      <div class="ios-modal-body">
+        <div class="ios-qr-section">
+          <div class="ios-qr-box">
+            <img src="qr-ios.png" id="iosQrImg" alt="QR Code cài đặt iOS" onerror="this.style.display='none'">
+          </div>
+          <div class="ios-qr-steps">
+            <span class="ios-step-badge">Cách 1 · Cài trực tiếp lên Màn hình chính iPhone (Khuyên dùng)</span>
+            <ol class="ios-step-list">
+              <li>Kết nối iPhone cùng Wi-Fi với máy tính, mở <strong>Camera iPhone</strong> quét mã QR bên trái (hoặc mở <strong>Safari</strong> vào địa chỉ <code id="iosLocalUrlText">http://10.32.22.83:8000</code>).</li>
+              <li>Ở thanh dưới cùng của Safari, nhấn nút <strong>Chia sẻ (Share)</strong> <span class="ios-inline-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></span>.</li>
+              <li>Cuộn xuống chọn <strong>"Thêm vào Màn hình chính" (Add to Home Screen)</strong> &rarr; nhấn <strong>Thêm (Add)</strong>.</li>
+            </ol>
+            <p class="ios-note-text">Sau khi thêm, toàn bộ <strong>2.372 từ vựng</strong> được lưu sẵn vào bộ nhớ iPhone — mở App chạy độc lập ngay cả khi đã tắt máy tính hoặc không có mạng!</p>
+          </div>
+        </div>
+
+        <div class="ios-offline-file-section">
+          <div>
+            <span class="ios-step-badge">Cách 2 · File App Độc Lập 100% Offline (Gửi qua Zalo / AirDrop / iCloud)</span>
+            <p style="font-size:13px; color:var(--slate-600); margin-top:4px;">Toàn bộ ứng dụng và 2.372 từ vựng đã được đóng gói gọn vào <strong>1 file duy nhất</strong>. Bạn có thể gửi file này qua Zalo, AirDrop hoặc lưu vào ứng dụng <strong>Tệp (Files) / Documents</strong> trên iPhone để mở bất cứ đâu không cần Wi-Fi.</p>
+          </div>
+          <a href="dist/TOEIC_Vocab_iOS_Offline.html" download="TOEIC_Vocab_iOS_Offline.html" class="btn-brand-lg" style="width:auto; white-space:nowrap; text-decoration:none; padding:10px 18px; font-size:13.5px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Tải File Offline (.html)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTO BANNER WHEN OPENED IN SAFARI ON IPHONE -->
+  <div class="ios-safari-banner" id="iosSafariBanner" style="display: none;">
+    <img src="apple-touch-icon.png" alt="App" class="ios-banner-icon">
+    <div class="ios-banner-text">
+      <strong>Cài thành App trên iPhone:</strong> Nhấn nút Chia sẻ
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" style="vertical-align:-2px; color:#15803d;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      ở dưới cùng &rarr; chọn <strong>"Thêm vào Màn hình chính"</strong> để dùng Full màn hình & Offline!
+    </div>
+    <button class="ios-banner-close" onclick="dismissIosBanner()">✕</button>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <script src="vocab_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+# Logs and runtime caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Node / Capacitor dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# IDE configuration
+.idea/
+.vscode/
